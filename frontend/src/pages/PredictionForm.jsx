@@ -1,17 +1,27 @@
-import React, { useState } from 'react';
-import { Box, FormControl, FormLabel, Input, Button, Grid } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Grid,
+  useToast,
+} from "@chakra-ui/react";
 
 function PredictionForm() {
   const [form, setForm] = useState({
-    age: '',
-    city: '',
-    job: '',
-    category: '',
-    timeOfTransaction: '',
-    creditCardNumber: '',
-    amount: '',
-    merchantLocation: '',
+    age: "",
+    city: "",
+    job: "",
+    category: "",
+    timeOfTransaction: "",
+    creditCardNumber: "",
+    amount: "",
+    merchantLocation: "",
   });
+
+  const toast = useToast();
 
   const handleChange = (e) => {
     setForm({
@@ -20,13 +30,51 @@ function PredictionForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+    try {
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      const data = await response.json();
+      console.log(data.prediction);
+
+      if (data.prediction && data.prediction === true) {
+        toast({
+          title: "Fraud",
+          description: "This transaction is fraudulent.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+          position: "top",
+        });
+      } else if (data.prediction && data.prediction === false) {
+        toast({
+          title: "Not Fraud",
+          description: "This transaction is not fraudulent.",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+          position: "top",
+        });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
-    <Box as="form" p={200} shadow="md" borderWidth="1px" onSubmit={handleSubmit}>
+    <Box
+      as="form"
+      p={200}
+      shadow="md"
+      borderWidth="1px"
+      onSubmit={handleSubmit}
+    >
       <Grid templateColumns="repeat(2, 1fr)" gap={6}>
         <FormControl id="age" isRequired>
           <FormLabel>Age</FormLabel>
