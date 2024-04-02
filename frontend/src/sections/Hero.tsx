@@ -2,7 +2,7 @@ import { DemoPaymentMethod } from "@/components/DemoPaymentMethod"
 
 const Hero = () => {
   return (
-    <div>
+    <div className="max-container padding-t">
       <DemoPaymentMethod />
     </div>
   )
