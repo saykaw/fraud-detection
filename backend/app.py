@@ -13,6 +13,7 @@ def hello_world():
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
+    print(data)
     prediction = True
     return jsonify({"prediction":prediction})
 

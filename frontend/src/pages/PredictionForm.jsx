@@ -52,7 +52,7 @@ function PredictionForm() {
           isClosable: true,
           position: "top",
         });
-      } else if (data.prediction && data.prediction === false) {
+      } else {
         toast({
           title: "Not Fraud",
           description: "This transaction is not fraudulent.",
