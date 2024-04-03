@@ -1,51 +1,37 @@
+# Credit Card Fraud Detection on Highly Imbalanced Dataset.
 
-# Text-based Geolocation Extraction System
+Follow the steps.
 
-This project combines a React front-end with a Python Flask back-end.
-Prerequisites
+## Prerequisites
 
-    Node.js (version 14 or later) and npm: https://nodejs.org/
-    Conda: https://conda.io/projects/conda/en/latest/user-guide/install/index.html
-    Git (optional, for cloning the repository): https://git-scm.com/downloads
+- Python 3.6 or higher
+- Node
 
-Installation
+## Installation
 
- 1. Clone the repository:
-> git clone https://github.com/dyo-tak/d2k-geolocater
+First, clone the repository to your local machine:
 
-    
- 2. Install Node.js dependencies:
+```bash
+git clone https://github.com/dyo-tak/ml-fraud-detection
+```
 
->     cd d2k-geolocater/frontend
->     npm install
+## Starting Frontend
 
- 3. Create and activate a virtual environment:
+Change directory to ./frontend and install dependencies 
 
->     cd MyAwesomeProject/backend
->     conda create -n my-env python=3.10.12
->     conda activate my-env
+```bash
+cd ./frontend
+pnpm install
+pnpm run dev
+```
 
- 4. Install Python dependencies:
- 
+## Starting Backend Server
 
->    pip install -r requirements.txt
+Change directory to ./backend, create python environment and then install dependencies 
 
- 5. Start the Flask development server:
-
-> flask run
-
-   
-
- 6. Start frontend
-
->     npm run dev
-
-Use code with caution. Learn more
-
-    This will launch the development server at http://127.0.0.1:5000/.
-
-Usage
-
-    Open the project in your preferred code editor.
-    Access the front-end in your browser at http://127.0.0.1:5000/.
-    Interact with the front-end components and observe the responses from the Python back-end.
+```bash
+cd ./backend
+python3 -m venv .venv
+pip3 install -r requirements.txt
+flask run
+```
