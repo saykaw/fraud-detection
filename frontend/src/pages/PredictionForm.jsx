@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import ReactSelect from "react-select";
+
 import {
   Box,
   FormControl,
@@ -8,6 +10,15 @@ import {
   Grid,
   useToast,
 } from "@chakra-ui/react";
+
+import data from "../../public/selection_data";
+
+const { categories, jobs } = data;
+const categoryOptions = categories.map((category) => ({
+  value: category,
+  label: category,
+}));
+const jobOptions = jobs.map((job) => ({ value: job, label: job }));
 
 function PredictionForm() {
   const [form, setForm] = useState({
@@ -32,6 +43,7 @@ function PredictionForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(categories, jobs);
     try {
       const response = await fetch("http://127.0.0.1:5000/predict", {
         method: "POST",
@@ -86,11 +98,19 @@ function PredictionForm() {
         </FormControl>
         <FormControl id="job" isRequired>
           <FormLabel>Job</FormLabel>
-          <Input name="job" type="text" onChange={handleChange} />
+          <ReactSelect
+            name="job"
+            options={jobOptions}
+            onChange={handleChange}
+          />
         </FormControl>
         <FormControl id="category" isRequired>
           <FormLabel>Category</FormLabel>
-          <Input name="category" type="text" onChange={handleChange} />
+          <ReactSelect
+            name="category"
+            options={categoryOptions}
+            onChange={handleChange}
+          />
         </FormControl>
         <FormControl id="timeOfTransaction" isRequired>
           <FormLabel>Time of Transaction</FormLabel>
