@@ -34,17 +34,41 @@ function PredictionForm() {
 
   const toast = useToast();
 
+  // const handleChange = (e) => {
+  //   setForm({
+  //     ...form,
+  //     [e.target.name]: e.target.value,
+  //     // [e.target.name]: selectedOption.value,
+  //   });
+  // };
+
+  // regular input
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+  };
+
+  const handleSelectChange = (selectedOption, fieldName) => {
+    setForm({
+      ...form,
+      [fieldName]: selectedOption.value,
+    });
+  };
+  
+  const preprocessInput = () => {
+    return form;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(categories, jobs);
     try {
+      // const preprocessedForm = preprocessInput();
+    // Log the preprocessed inputs
+    //  console.log("Preprocessed Input:", preprocessedForm);
       const response = await fetch("http://127.0.0.1:5000/predict", {
         method: "POST",
         headers: {
@@ -55,7 +79,7 @@ function PredictionForm() {
       const data = await response.json();
       console.log(data.prediction);
 
-      if (data.prediction && data.prediction === true) {
+      if (data.prediction && data.prediction === "1") {
         toast({
           title: "Fraud",
           description: "This transaction is fraudulent.",
@@ -93,39 +117,41 @@ function PredictionForm() {
           <Input name="age" type="number" onChange={handleChange} />
         </FormControl>
         <FormControl id="city" isRequired>
-          <FormLabel>City</FormLabel>
-          <Input name="city" type="text" onChange={handleChange} />
+          <FormLabel>City - city of the credit card holder</FormLabel>
+          <Input name="city" type="text" onChange={handleChange}  />
         </FormControl>
         <FormControl id="job" isRequired>
-          <FormLabel>Job</FormLabel>
+          <FormLabel>Job - job of the credit card holder</FormLabel>
           <ReactSelect
             name="job"
             options={jobOptions}
-            onChange={handleChange}
+            // onChange={handleChange}
+            onChange = {(selectedOption) => handleSelectChange(selectedOption, "job")}
           />
         </FormControl>
         <FormControl id="category" isRequired>
-          <FormLabel>Category</FormLabel>
+          <FormLabel>Category - category of merchant</FormLabel>
           <ReactSelect
             name="category"
             options={categoryOptions}
-            onChange={handleChange}
+            // onChange={handleChange}
+            onChange = {(selectedOption) => handleSelectChange(selectedOption, "category")}
           />
         </FormControl>
         <FormControl id="timeOfTransaction" isRequired>
-          <FormLabel>Time of Transaction</FormLabel>
+          <FormLabel>Time of Transaction - hour</FormLabel>
           <Input name="timeOfTransaction" type="time" onChange={handleChange} />
         </FormControl>
         <FormControl id="creditCardNumber" isRequired>
-          <FormLabel>Credit Card Number</FormLabel>
+          <FormLabel>Credit Card Number- cc_num_freq </FormLabel>
           <Input name="creditCardNumber" type="text" onChange={handleChange} />
         </FormControl>
         <FormControl id="amount" isRequired>
-          <FormLabel>Amount</FormLabel>
+          <FormLabel>Amount - amt</FormLabel>
           <Input name="amount" type="number" onChange={handleChange} />
         </FormControl>
         <FormControl id="merchantLocation" isRequired>
-          <FormLabel>Merchant Location</FormLabel>
+          <FormLabel>Merchant Location - merch_lat</FormLabel>
           <Input name="merchantLocation" type="text" onChange={handleChange} />
         </FormControl>
       </Grid>
