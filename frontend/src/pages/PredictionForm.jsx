@@ -13,12 +13,14 @@ import {
 
 import data from "../../public/selection_data";
 
-const { categories, jobs } = data;
+const { categories, jobs, cities } = data;
 const categoryOptions = categories.map((category) => ({
   value: category,
   label: category,
 }));
 const jobOptions = jobs.map((job) => ({ value: job, label: job }));
+const cityOptions = cities.map((city) => ({ value: city, label: city }));
+
 
 function PredictionForm() {
   const [form, setForm] = useState({
@@ -34,15 +36,6 @@ function PredictionForm() {
 
   const toast = useToast();
 
-  // const handleChange = (e) => {
-  //   setForm({
-  //     ...form,
-  //     [e.target.name]: e.target.value,
-  //     // [e.target.name]: selectedOption.value,
-  //   });
-  // };
-
-  // regular input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({
@@ -66,9 +59,6 @@ function PredictionForm() {
     e.preventDefault();
     console.log(categories, jobs);
     try {
-      // const preprocessedForm = preprocessInput();
-    // Log the preprocessed inputs
-    //  console.log("Preprocessed Input:", preprocessedForm);
       const response = await fetch("http://127.0.0.1:5000/predict", {
         method: "POST",
         headers: {
@@ -117,41 +107,43 @@ function PredictionForm() {
           <Input name="age" type="number" onChange={handleChange} />
         </FormControl>
         <FormControl id="city" isRequired>
-          <FormLabel>City - city of the credit card holder</FormLabel>
-          <Input name="city" type="text" onChange={handleChange}  />
+          <FormLabel>City</FormLabel>
+          <ReactSelect
+            name="city"
+            options={cityOptions}
+            onChange = {(selectedOption) => handleSelectChange(selectedOption, "city")}
+          />
         </FormControl>
         <FormControl id="job" isRequired>
-          <FormLabel>Job - job of the credit card holder</FormLabel>
+          <FormLabel>Job</FormLabel>
           <ReactSelect
             name="job"
             options={jobOptions}
-            // onChange={handleChange}
             onChange = {(selectedOption) => handleSelectChange(selectedOption, "job")}
           />
         </FormControl>
         <FormControl id="category" isRequired>
-          <FormLabel>Category - category of merchant</FormLabel>
+          <FormLabel>Merchant Category</FormLabel>
           <ReactSelect
             name="category"
             options={categoryOptions}
-            // onChange={handleChange}
             onChange = {(selectedOption) => handleSelectChange(selectedOption, "category")}
           />
         </FormControl>
         <FormControl id="timeOfTransaction" isRequired>
-          <FormLabel>Time of Transaction - hour</FormLabel>
+          <FormLabel>Time of Transaction</FormLabel>
           <Input name="timeOfTransaction" type="time" onChange={handleChange} />
         </FormControl>
         <FormControl id="creditCardNumber" isRequired>
-          <FormLabel>Credit Card Number- cc_num_freq </FormLabel>
+          <FormLabel>Credit Card Number</FormLabel>
           <Input name="creditCardNumber" type="text" onChange={handleChange} />
         </FormControl>
         <FormControl id="amount" isRequired>
-          <FormLabel>Amount - amt</FormLabel>
+          <FormLabel>Amount</FormLabel>
           <Input name="amount" type="number" onChange={handleChange} />
         </FormControl>
         <FormControl id="merchantLocation" isRequired>
-          <FormLabel>Merchant Location - merch_lat</FormLabel>
+          <FormLabel>Merchant Location</FormLabel>
           <Input name="merchantLocation" type="text" onChange={handleChange} />
         </FormControl>
       </Grid>

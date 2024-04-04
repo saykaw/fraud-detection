@@ -28,46 +28,21 @@ class FraudPrediction:
         self.locator = Nominatim(user_agent="Geopy Library")
         
     def preprocess(self, data):
-
-        # data['category'] = pd.Series(data['category'])
-        # data['job'] = pd.Series(data['job'])
-        # data['city'] = pd.Series(data['city'])
-    
         data['age'] = int(data['age'])
         data['amount'] = float(data['amount'])
         data['hour'] = dt.strptime(data['timeOfTransaction'], '%H:%M').hour
         data['amt_log'] = np.log(data['amount'])
-        # data['category_WOE'] = data['category'].apply(lambda x: get_woe_value('category', x))
-        # data['job_WOE'] = data['job'].apply(lambda x: get_woe_value('job', x))
-        # data['city_WOE'] = data['city'].apply(lambda x: get_woe_value('city', x))
         data['category_WOE'] = get_woe_value('category', data['category'])
         data['job_WOE'] =  get_woe_value('job', data['job'])
         data['city_WOE'] = get_woe_value('city', data['city'])
         data['cc_num_frequency'] = random.randint(0,1000)
         data['merchant_location'] = data['merchantLocation']
-        # location = self.locator.geocode(data['city_WOE'])
-        # if location:
-        #     data['merch_lat'] = location.latitude
-        # else:
-        #     data['merch_lat'] = 1
-        #data['merch_lat'] = 44.748
-
-        # woe = ce.WOEEncoder()
-        # data['category_WOE'] = 1
-        # data['city_WOE'] = 1
-        # data['job_WOE'] = 1
-        # data['category_WOE'] = woe.fit_transform(data['category'], 1)
-        # data['city_WOE'] = woe.fit_transform(data['city'], 1)
-        # data['job_WOE'] = woe.fit_transform(data['job'], 1)
-        # data['job_WOE'] =  31
-        #data['merch_lat'] = 40.7128    # NYC lat
-        
-        # print("DataFrame before conversion:")
-        # print(data)
-
-        # columns = ['merch_lat', 'age', 'hour', 'amt_log', 'category_WOE', 'city_WOE', 'job_WOE', 'cc_num_frequency']
-        # model_data = np.array([[data[column] for column in columns]], dtype=float)
-            
+        location = self.locator.geocode(data['merchant_location'])
+        if location:
+            data['merch_lat'] = location.latitude
+        else:
+            data['merch_lat'] = 1
+                    
         model_data = np.array([
             data['merch_lat'],
             data['age'],
